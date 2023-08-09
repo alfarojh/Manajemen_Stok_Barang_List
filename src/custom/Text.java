@@ -74,6 +74,17 @@ public class Text {
         System.out.println("\u001B[0m");  // Kembalikan warna ke default (kode ANSI).
     }
 
+    public void printMessage(String message) {
+        System.out.print("| ");
+        int length = widthTabel - message.length() - 2;
+        System.out.print(" ".repeat(length / 2) + message);
+        if (length % 2 == 0) {
+            System.out.print(" ".repeat(length / 2));
+        } else {
+            System.out.print(" ".repeat(length /2  + 1));
+        }
+        System.out.print(" | \n");
+    }
     // Fungsi untuk mencetak garis pembatas tabel.
     public void line() {
         System.out.println("|" + "=".repeat(widthTabel) + "|");

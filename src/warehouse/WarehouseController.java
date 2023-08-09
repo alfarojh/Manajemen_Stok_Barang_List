@@ -66,7 +66,7 @@ public class WarehouseController {
             return;
         }
         category.add(new Category(categoryName)); // Menambahkan kategori baru.
-        System.out.println("Kategori berhasil ditambahkan."); // Menampilkan pesan sukses.
+        System.out.println("Kategori " + categoryName + " berhasil ditambahkan."); // Menampilkan pesan sukses.
         log.add(new MessageLog(categoryName, "Tambah Kategori")); // Menambahkan pesan log.
     }
 
@@ -82,9 +82,9 @@ public class WarehouseController {
 
         try {
             System.out.println("Kategori " + category.get(categoryIndex).getNameCategory() + " berhasil dihapus.");
-            category.remove(categoryIndex); // Hapus kategori.
             log.add(new MessageLog(category.get(categoryIndex).getNameCategory(), "Hapus Kategori")); // Tambahkan pesan log.
-        } catch (IndexOutOfBoundsException e) {
+            category.remove(categoryIndex); // Hapus kategori.
+            } catch (IndexOutOfBoundsException e) {
             inputHandler.errorMessage("Kategori tidak ada, gagal menghapus.");
         }
     }
@@ -99,9 +99,10 @@ public class WarehouseController {
         try {
             System.out.println("Nama berhasil diupdate dari " + category.get(categoryIndex).getNameCategory() +
                     " menjadi " + newName);
+            log.add(new MessageLog(category.get(categoryIndex).getNameCategory(),
+                    "Update Nama Kategori menjadi " + newName)); // Tambahkan pesan log.
             category.get(categoryIndex).setNameCategory(newName); // Perbarui nama kategori.
-            log.add(new MessageLog(category.get(categoryIndex).getNameCategory(), "Update Nama Kategori")); // Tambahkan pesan log.
-        } catch (IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
             inputHandler.errorMessage("Update gagal!");
         }
     }
@@ -159,9 +160,9 @@ public class WarehouseController {
         if (!isItemExistByCategory(categoryIndex, itemIndex)) {
             return; // Jika item tidak ada dalam kategori, tidak perlu dihapus.
         }
-        category.get(categoryIndex).removeItem(itemIndex); // Hapus item dari kategori.
         log.add(new MessageLog(category.get(categoryIndex).getItem(itemIndex).getNameItem(),
                 "Hapus Item di Kategori " + category.get(categoryIndex).getNameCategory())); // Tambahkan pesan log.
+        category.get(categoryIndex).removeItem(itemIndex); // Hapus item dari kategori.
     }
 
     // Menghapus item dari kategori berdasarkan nama item.
@@ -174,9 +175,10 @@ public class WarehouseController {
         if (!isItemExistByCategory(categoryIndex, itemIndex)) {
             return; // Jika item tidak ada dalam kategori, tidak perlu diperbarui.
         }
-        category.get(categoryIndex).updateItem(itemIndex, newName); // Perbarui nama item dalam kategori.
         log.add(new MessageLog(category.get(categoryIndex).getItem(itemIndex).getNameItem(),
-                "Update Nama Item di Kategori " + category.get(categoryIndex).getNameCategory())); // Tambahkan pesan log.
+                "Update Nama Item di dari " + category.get(categoryIndex).getNameCategory()
+                        + " menjadi " + newName)); // Tambahkan pesan log.
+        category.get(categoryIndex).updateItem(itemIndex, newName); // Perbarui nama item dalam kategori.
     }
 
     // Memperbarui nama item dalam kategori berdasarkan nama item lama.
@@ -221,14 +223,27 @@ public class WarehouseController {
     // Mencari item berdasarkan nama item.
     public void searchItem(String itemName) {
         for (int indexCategory = 0; indexCategory < getSizeCategory(); indexCategory++) {
+            boolean itemExist = false;
+            Text text = new Text("Kategori: " + category.get(indexCategory).getNameCategory(),
+                    new String[]{"Id", "Nama Barang", "Qty"},
+                    new char[]{'c','l','c'},
+                    new int[]{4, 30, 6});
+            text.printTitle();
             for (int indexItem = 0; indexItem < category.get(indexCategory).getItemSize(); indexItem++) {
                 if (category.get(indexCategory).getItem(indexItem).getNameItem().toLowerCase()
                         .contains(itemName.toLowerCase())) {
-                    System.out.println(category.get(indexCategory).getNameCategory() + " - "
-                            + category.get(indexCategory).getItem(indexItem).getNameItem() + " - "
-                            + category.get(indexCategory).getItem(indexItem).getQtyItem());
+                    text.printBody(indexItem, new String[]{String.valueOf(indexItem + 1),
+                            category.get(indexCategory).getItem(indexItem).getNameItem(),
+                            String.valueOf(category.get(indexCategory).getItem(indexItem).getQtyItem())});
+                    itemExist = true;
                 }
             }
+            if (!itemExist) {
+                text.printMessage("Barang tidak tersedia");
+
+            }
+            text.line();
+            System.out.println();
         }
     }
     // =================================== Item Section ========================================
@@ -238,15 +253,21 @@ public class WarehouseController {
     // Memperbarui jumlah stok item dalam suatu kategori berdasarkan indeks item.
     public void updateQtyItemByCategory(int categoryIndex, int itemIndex, int itemCount) {
         if (!isItemExistByCategory(categoryIndex, itemIndex)) {
-            // Jika item tidak ada dalam kategori, tampilkan pesan dan informasi debugging.
+            // Jika item tidak ada dalam kategori, tampilkan pesan dan kembali ke menu utama.
             System.out.println(isItemExistByCategory(categoryIndex, itemIndex) + " "
                     + categoryIndex + " " + itemIndex);
             return;
         }
-        category.get(categoryIndex).updateQty(itemIndex, itemCount); // Perbarui jumlah stok item.
+        int currentQty = category.get(categoryIndex).getItem(itemIndex).getQtyItem();
+        // Jika jumlah item yang dikurangi melebihi stok, tampilkan pesan error dan kembali ke menu utama.
+        if (currentQty < Math.abs(itemCount) && itemCount < 0) {
+            inputHandler.errorMessage("Jumlah barang tidak mencukupi, sisa barang digudang sebanyak " + currentQty);
+            return;
+        }
+        category.get(categoryIndex).updateQty(itemIndex, currentQty + itemCount); // Perbarui jumlah stok item.
         log.add(new MessageLog(category.get(categoryIndex).getItem(itemIndex).getNameItem(),
                 "Update Stok Item di Kategori " + category.get(categoryIndex).getNameCategory()
-                        + " -> " + itemCount)); // Tambahkan pesan log.
+                        + " -> " + (currentQty + itemCount))); // Tambahkan pesan log.
     }
 
     // Memperbarui jumlah stok item dalam suatu kategori berdasarkan nama item.

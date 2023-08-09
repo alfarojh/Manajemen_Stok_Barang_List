@@ -74,7 +74,7 @@ public class Main {
 
         // Tambahkan kategori baru ke dalam sistem gudang.
         warehouseController.addCategory(nameCategory);
-        newLine();
+        inputHandler.delayInput();
     }
 
     // Fungsi untuk menghapus kategori.
@@ -90,7 +90,7 @@ public class Main {
 
         try {
             // Coba untuk menghapus kategori berdasarkan indeks yang diinput.
-            if (!warehouseController.isCategoryExist(Integer.parseInt(inputCategory))) {
+            if (!warehouseController.isCategoryExist(Integer.parseInt(inputCategory) - 1)) {
                 inputHandler.errorMessage("Kategori tidak ditemukan, gagal menghapus nama kategori.");
                 return;
             }
@@ -103,7 +103,7 @@ public class Main {
             }
             warehouseController.removeCategory(inputCategory);
         }
-        newLine();
+        inputHandler.delayInput();
     }
 
     // Fungsi untuk mengupdate nama kategori.
@@ -119,7 +119,7 @@ public class Main {
 
         try {
             // Coba untuk mengupdate nama kategori berdasarkan indeks yang diinput.
-            if (!warehouseController.isCategoryExist(Integer.parseInt(inputCategory))) {
+            if (!warehouseController.isCategoryExist(Integer.parseInt(inputCategory) - 1)) {
                 inputHandler.errorMessage("Kategori tidak ditemukan, gagal mengupdate nama kategori.");
                 return;
             }
@@ -138,7 +138,7 @@ public class Main {
         } catch (Exception e) {
             warehouseController.updateNameCategory(inputCategory, newNameCategory);
         }
-        newLine();
+        inputHandler.delayInput();
     }
 
     //========================================= warehouse.Category Section =============================================
@@ -264,6 +264,7 @@ public class Main {
             // Jika input bukan indeks, coba menghapus item berdasarkan nama item.
             warehouseController.removeItemByCategory(indexCategory, choice);
         }
+        inputHandler.delayInput();
     }
 
     // Fungsi untuk menghapus item dari kategori berdasarkan nama kategori.
@@ -337,6 +338,7 @@ public class Main {
         } catch (Exception e) {
             warehouseController.updateNameItemByCategory(indexCategory, choice, newName);
         }
+        inputHandler.delayInput();
     }
 
     // Fungsi untuk mengupdate nama item dalam kategori berdasarkan nama kategori.
@@ -410,6 +412,7 @@ public class Main {
         } catch (Exception e) {
             warehouseController.updateQtyItemByCategory(categoryIndex, choice, countItem);
         }
+        inputHandler.delayInput();
     }
 
     // Fungsi untuk mengupdate stok item dalam kategori berdasarkan nama kategori.
@@ -424,6 +427,7 @@ public class Main {
         String nameItem = inputHandler.getInputText("Masukkan nama yang ingin dicari: ");
         // Panggil fungsi searchItem dari warehouseController.
         warehouseController.searchItem(nameItem);
+        inputHandler.delayInput();
     }
 
     // Fungsi untuk menampilkan semua item.
