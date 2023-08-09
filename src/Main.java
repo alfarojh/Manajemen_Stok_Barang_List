@@ -27,8 +27,7 @@ public class Main {
                 }
             } catch (Exception e) {
                 // Menangkap dan menampilkan pesan jika terjadi exception (kesalahan)
-//                System.out.println("Keluar dari program");
-                e.printStackTrace();
+                System.out.println("Keluar dari program");
                 break; // Keluar dari perulangan untuk mengakhiri program
             }
             newLine(5);

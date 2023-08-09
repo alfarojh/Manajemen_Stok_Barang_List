@@ -42,7 +42,6 @@ public class Category {
             return;
         }
         items.add(new Items(itemName, itemCount));
-        System.out.println("Item berhasil ditambahkan.");
     }
 
     // Menghapus item dari kategori berdasarkan indeks item.

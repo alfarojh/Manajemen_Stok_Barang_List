@@ -1,5 +1,6 @@
 package warehouse;
 
+import custom.Text;
 import input.InputHandler;
 import log.MessageLog;
 
@@ -10,15 +11,18 @@ public class WarehouseController {
     private final ArrayList<Category> category = new ArrayList<>();
     private final ArrayList<MessageLog> log = new ArrayList<>();
 
-    public String toString() {
-        return "Teks yang akan ditampilkan";
-    }
+    public WarehouseController () {
+        category.add(new Category("makanan"));
+        category.get(0).addItem("nasi", 20);
+        category.get(0).addItem("ikan", 10);
+        category.get(0).addItem("ayam", 15);
 
-//    public WarehouseController () {
-//        category.add(new Category("Makanan"));
-//        category.get(0).addItem("Nasi", 20);
-//    }
-    // ================================ warehouse.Category Section =======================================
+        category.add(new Category("pakaian"));
+        category.get(1).addItem("baju", 20);
+        category.get(1).addItem("syal", 10);
+        category.get(1).addItem("celana", 15);
+    }
+    // ================================ Category Section =======================================
 
     // Memeriksa apakah daftar kategori kosong.
     public boolean isCategoriesEmpty() {
@@ -114,7 +118,7 @@ public class WarehouseController {
         }
     }
 
-    // ================================ warehouse.Category Section =======================================
+    // ================================ Category Section =======================================
 
     // =================================== Item Section ========================================
 
@@ -137,6 +141,7 @@ public class WarehouseController {
             return; // Jika item sudah ada, tidak perlu ditambahkan lagi.
         }
         category.get(categoryIndex).addItem(itemName, itemCount); // Tambahkan item ke dalam kategori.
+        System.out.println("Item berhasil ditambahkan.");
         log.add(new MessageLog(itemName, "Tambah Item di Kategori " + category.get(categoryIndex).getNameCategory())); // Tambahkan pesan log.
     }
 
@@ -184,17 +189,24 @@ public class WarehouseController {
     public void showItemsByCategories(int categoryIndex) {
         if (categoryIndex < 0 || categoryIndex >= category.size()) { return; }
 
-        System.out.println("Kategori: " + category.get(categoryIndex).getNameCategory());
+        Text text = new Text("Kategori: " + category.get(categoryIndex).getNameCategory(),
+                new String[]{"Id", "Nama Barang", "Qty"},
+                new char[]{'c','l','c'},
+                new int[]{4, 30, 6});
 
+        text.printTitle();
         if (category.get(categoryIndex).getItemSize() == 0) {
             System.out.println("Item tidak tersedia");
             return;
         }
 
         for (int indexItem = 0; indexItem < category.get(categoryIndex).getItemSize(); indexItem++) {
-            System.out.println((indexItem + 1) + ". " + category.get(categoryIndex).getItem(indexItem).getNameItem()
-                    + " - " + category.get(categoryIndex).getItem(indexItem).getQtyItem());
+            text.printBody(indexItem, new String[]{String.valueOf(indexItem + 1),
+                    category.get(categoryIndex).getItem(indexItem).getNameItem(),
+                    String.valueOf(category.get(categoryIndex).getItem(indexItem).getQtyItem())});
         }
+        text.line();
+        System.out.println();
     }
 
     // Mencari item berdasarkan nama item.
@@ -203,7 +215,9 @@ public class WarehouseController {
             for (int indexItem = 0; indexItem < category.get(indexCategory).getItemSize(); indexItem++) {
                 if (category.get(indexCategory).getItem(indexItem).getNameItem().toLowerCase()
                         .contains(itemName.toLowerCase())) {
-                    System.out.println(category.get(indexCategory).getItem(indexItem).getNameItem());
+                    System.out.println(category.get(indexCategory).getNameCategory() + " - "
+                            + category.get(indexCategory).getItem(indexItem).getNameItem() + " - "
+                            + category.get(indexCategory).getItem(indexItem).getQtyItem());
                 }
             }
         }
