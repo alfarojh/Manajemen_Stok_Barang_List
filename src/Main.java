@@ -59,18 +59,22 @@ public class Main {
 
     // Fungsi untuk menambahkan kategori baru.
     private static void addCategory() {
+        // Tampilkan daftar kategori.
+        warehouseController.showCategories();
         String nameCategory = inputHandler.getInputText("Masukkan nama kategori: ");
 
         // Periksa apakah kategori sudah ada sebelumnya.
         while (warehouseController.isCategoryExist(nameCategory)) {
-            inputHandler.errorMessage("Maaf, kategori sudah ada.\n" +
-                    "Ketik 'keluar' jika ingin kembali ke menu utama");
+            inputHandler.errorMessage("Maaf, kategori sudah ada.");
             nameCategory = inputHandler.getInputText("Masukkan nama kategori: ");
-            if (nameCategory.equalsIgnoreCase("keluar")) { break; }
+            if (nameCategory.equalsIgnoreCase("keluar") || nameCategory.equals("0")) { break; }
         }
 
         // Jika pengguna memilih untuk keluar, kembali ke menu utama.
-        if (nameCategory.equalsIgnoreCase("keluar")) { return; }
+        if (nameCategory.equalsIgnoreCase("keluar") || nameCategory.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
 
         // Tambahkan kategori baru ke dalam sistem gudang.
         warehouseController.addCategory(nameCategory);
@@ -88,6 +92,11 @@ public class Main {
         warehouseController.showCategories();
         String inputCategory = inputHandler.getInputText("Masukkan kategori yang ingin dihapus: ");
 
+        // Jika pengguna memilih untuk keluar, kembali ke menu utama.
+        if (inputCategory.equalsIgnoreCase("keluar") || inputCategory.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
         try {
             // Coba untuk menghapus kategori berdasarkan indeks yang diinput.
             if (!warehouseController.isCategoryExist(Integer.parseInt(inputCategory) - 1)) {
@@ -117,6 +126,11 @@ public class Main {
         warehouseController.showCategories();
         String inputCategory = inputHandler.getInputText("Masukkan kategori yang ingin diupdate: ");
 
+        // Jika pengguna memilih untuk keluar, kembali ke menu utama.
+        if (inputCategory.equalsIgnoreCase("keluar") || inputCategory.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
         try {
             // Coba untuk mengupdate nama kategori berdasarkan indeks yang diinput.
             if (!warehouseController.isCategoryExist(Integer.parseInt(inputCategory) - 1)) {
@@ -157,11 +171,13 @@ public class Main {
         } else {
             // Tampilkan daftar kategori.
             warehouseController.showCategories();
-            System.out.println("0. Keluar");
             choice = inputHandler.getInputText("Pilih kategori: ");
 
             // Jika pengguna memilih untuk keluar, kembali ke menu utama.
-            if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) { return; }
+            if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) {
+                System.out.println("Kembali ke menu utama.");
+                return;
+            }
         }
 
         try {
@@ -198,7 +214,10 @@ public class Main {
         }
 
         // Jika pengguna memilih untuk keluar, kembali ke menu utama.
-        if (nameItem.equalsIgnoreCase("keluar")) { return; }
+        if (nameItem.equalsIgnoreCase("keluar")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
 
         // Minta input jumlah item dan tambahkan item baru ke dalam sistem gudang.
         String qtyItem = String.valueOf(inputHandler.getIntegerInput("Masukkan jumlah item: "));
@@ -224,11 +243,13 @@ public class Main {
 
         // Tampilkan daftar kategori.
         warehouseController.showCategories();
-        System.out.println("0. Keluar");
         String choice = inputHandler.getInputText("Pilih kategori: ");
 
         // Jika pengguna memilih untuk keluar, kembali ke menu utama.
-        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) { return; }
+        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
 
         try {
             // Coba untuk menghapus item berdasarkan pilihan kategori.
@@ -255,7 +276,10 @@ public class Main {
         String choice = inputHandler.getInputText("Pilih item yang ingin dihapus: ");
 
         // Jika pengguna memilih untuk keluar, kembali ke menu utama.
-        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) { return; }
+        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
 
         try {
             // Coba untuk menghapus item berdasarkan pilihan indeks item.
@@ -281,11 +305,13 @@ public class Main {
 
         // Tampilkan daftar kategori.
         warehouseController.showCategories();
-        System.out.println("0. Keluar");
         String choice = inputHandler.getInputText("Pilih kategori: ");
 
         // Jika pengguna memilih untuk keluar, kembali ke menu utama.
-        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) { return; }
+        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
         newLine();
 
         try {
@@ -313,7 +339,10 @@ public class Main {
         String choice = inputHandler.getInputText("Pilih item yang ingin namanya diupdate: ");
 
         // Jika pengguna memilih untuk keluar, kembali ke menu utama.
-        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) { return; }
+        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
 
         try {
             // Coba untuk mengupdate nama item berdasarkan pilihan indeks item.
@@ -355,11 +384,13 @@ public class Main {
 
         // Tampilkan daftar kategori.
         warehouseController.showCategories();
-        System.out.println("0. Keluar");
         String choice = inputHandler.getInputText("Pilih kategori: ");
 
         // Jika pengguna memilih untuk keluar, kembali ke menu utama.
-        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) { return; }
+        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
         newLine();
 
         try {
@@ -387,7 +418,10 @@ public class Main {
         String choice = inputHandler.getInputText("Pilih item yang ingin stocknya diupdate: ");
 
         // Jika pengguna memilih untuk keluar, kembali ke menu utama.
-        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) { return; }
+        if (choice.equalsIgnoreCase("keluar") || choice.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
 
         try {
             // Coba untuk mengupdate stok item berdasarkan pilihan indeks item.

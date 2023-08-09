@@ -125,6 +125,9 @@ public class WarehouseController {
                             category.get(indexCategory).getNameCategory()});
 //            System.out.println((indexCategory + 1) + ". " + category.get(indexCategory).getNameCategory());
         }
+        text.printBody(category.size(),
+                new String[]{"0",
+                        "Keluar"});
         text.line();
     }
 
@@ -207,7 +210,7 @@ public class WarehouseController {
 
         text.printTitle();
         if (category.get(categoryIndex).getItemSize() == 0) {
-            System.out.println("Item tidak tersedia");
+            text.printMessage("Barang tidak tersedia");
             return;
         }
 
@@ -267,7 +270,7 @@ public class WarehouseController {
         category.get(categoryIndex).updateQty(itemIndex, currentQty + itemCount); // Perbarui jumlah stok item.
         log.add(new MessageLog(category.get(categoryIndex).getItem(itemIndex).getNameItem(),
                 "Update Stok Item di Kategori " + category.get(categoryIndex).getNameCategory()
-                        + " -> " + (currentQty + itemCount))); // Tambahkan pesan log.
+                        + " -> " + itemCount)); // Tambahkan pesan log.
     }
 
     // Memperbarui jumlah stok item dalam suatu kategori berdasarkan nama item.
@@ -279,8 +282,22 @@ public class WarehouseController {
 
     // Menampilkan pesan log yang berisi kegiatan pengguna.
     public void showLog () {
-        for (MessageLog messageLog : log) {
-            System.out.println(messageLog.getLog());
+        if (log.size() > 0) {
+            Text text = new Text("",
+                    new String[]{"Timestamp", "Nama", "Keterangan"},
+                    new char[]{'c', 'l', 'l'},
+                    new int[]{19, 30, 100});
+
+            text.line();
+            text.printSubTitle();
+            for (int indexLog = 0; indexLog < log.size(); indexLog++) {
+                text.printBody(indexLog,
+                        new String[]{log.get(indexLog).getCurrentTime(), log.get(indexLog).getItemName(), log.get(indexLog).getLogActivity()});
+            }
+            text.line();
+        } else {
+            System.out.println("Tidak ada log");
         }
+
     }
 }

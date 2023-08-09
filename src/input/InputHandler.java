@@ -50,7 +50,13 @@ public class InputHandler {
     // Fungsi untuk menerima masukan dari pengguna dengan menampilkan pesan terlebih dahulu
     public String getInputText (String message) {
         System.out.print(message);
-        return scanner.nextLine().trim();
+        String input = scanner.nextLine().trim();
+        while (input.equals("")) {
+            errorMessage("Maaf, input tidak boleh kosong!");
+            System.out.print(message);
+            input = scanner.nextLine().trim();
+        }
+        return input;
     }
 
     // Format untuk menata teks menjadi rata kanan berdasarkan panjang teks dan panjang maksimum yang diinginkan

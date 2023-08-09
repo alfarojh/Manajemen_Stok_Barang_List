@@ -24,10 +24,16 @@ public class MessageLog {
         this.logActivity = logActivity;
     }
 
-    // Fungsi untuk mendapatkan pesan log lengkap.
-    public String getLog() {
-        // Gabungkan waktu, nama item, dan aktivitas log dalam satu string.
-        return currentTime + " - " + itemName + " - " + logActivity;
+    public String getCurrentTime() {
+        return currentTime;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public String getLogActivity() {
+        return logActivity;
     }
 
 }
