@@ -113,9 +113,18 @@ public class WarehouseController {
 
     // Menampilkan daftar kategori beserta indeksnya.
     public void showCategories() {
+        Text text = new Text("",
+                new String[]{"No", "Kategori"},
+                new char[]{'c', 'l'},
+                new int[]{3, 20});
+        text.line();
         for (int indexCategory = 0; indexCategory < category.size(); indexCategory++) {
-            System.out.println((indexCategory + 1) + ". " + category.get(indexCategory).getNameCategory());
+            text.printBody(indexCategory,
+                    new String[]{String.valueOf(indexCategory + 1),
+                            category.get(indexCategory).getNameCategory()});
+//            System.out.println((indexCategory + 1) + ". " + category.get(indexCategory).getNameCategory());
         }
+        text.line();
     }
 
     // ================================ Category Section =======================================
