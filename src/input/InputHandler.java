@@ -59,44 +59,6 @@ public class InputHandler {
         return input;
     }
 
-    // Format untuk menata teks menjadi rata kanan berdasarkan panjang teks dan panjang maksimum yang diinginkan
-    public String formatAutoSpacingLeft(String text, int maxLengthText) {
-        if (text.length() < maxLengthText) {
-            // Jika panjang teks lebih pendek dari panjang maksimum, tambahkan spasi di sebelah kanan
-            int numSpace = maxLengthText - text.length();
-            return text + " ".repeat(numSpace);
-        } else {
-            // Jika panjang teks sudah sama atau lebih panjang dari panjang maksimum, kembalikan teks asli
-            return text;
-        }
-    }
-
-    // Format untuk menata teks menjadi rata tengah berdasarkan panjang teks dan panjang maksimum yang diinginkan
-    public String formatAutoSpacingCenter(String text, int maxLengthText) {
-        if (text.length() < maxLengthText) {
-            // Jika panjang teks lebih pendek dari panjang maksimum, tambahkan spasi di sebelah kiri dan kanan
-            int numSpace = maxLengthText - text.length();
-            StringBuilder spaceText = new StringBuilder();
-
-            if (numSpace % 2 == 1) {
-                // Jika jumlah spasi ganjil, tambahkan spasi tambahan di sebelah kanan
-                numSpace /= 2;
-                spaceText.append(" ".repeat(numSpace));
-                spaceText.append(text);
-                spaceText.append(" ".repeat(numSpace + 1));
-            } else {
-                // Jika jumlah spasi genap, tambahkan jumlah spasi yang sama di sebelah kiri dan kanan
-                numSpace /= 2;
-                spaceText.append(" ".repeat(numSpace));
-                spaceText.append(text);
-                spaceText.append(" ".repeat(numSpace));
-            }
-            return spaceText.toString();
-        } else {
-            return text; // Jika panjang teks sudah sama atau lebih panjang dari panjang maksimum, kembalikan teks asli
-        }
-    }
-
     // Menutup scanner setelah penggunaan selesai
     public void close () {
         scanner.close();

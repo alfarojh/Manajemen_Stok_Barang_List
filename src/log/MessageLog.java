@@ -24,16 +24,20 @@ public class MessageLog {
         this.logActivity = logActivity;
     }
 
+    // Fungsi untuk mendapatkan waktu saat log dibuat.
     public String getCurrentTime() {
         return currentTime;
     }
 
+    // Fungsi untuk mendapatkan nama item terkait dalam log.
     public String getItemName() {
         return itemName;
     }
 
+    // Fungsi untuk mendapatkan aktivitas terkait dalam log.
     public String getLogActivity() {
         return logActivity;
     }
+
 
 }

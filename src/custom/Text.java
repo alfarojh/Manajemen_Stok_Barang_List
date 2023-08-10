@@ -27,12 +27,12 @@ public class Text {
         line();  // Cetak garis batas atas tabel.
         // Cetak judul tabel dengan rata kanan.
         System.out.println("|  " + title + " ".repeat(widthTabel - title.length() - 4) + "  |");
-        line();  // Cetak garis batas bawah judul tabel.
         printSubTitle();  // Cetak subjudul tabel.
     }
 
     // Fungsi untuk mencetak subjudul tabel.
     public void printSubTitle() {
+        line();  // Cetak garis batas atas sub judul.
         System.out.print("| ");
         for (int indexSubTitle = 0; indexSubTitle < textLength.length; indexSubTitle++) {
             int length = (textLength[indexSubTitle] - subTitle[indexSubTitle].length()) / 2;
@@ -74,17 +74,44 @@ public class Text {
         System.out.println("\u001B[0m");  // Kembalikan warna ke default (kode ANSI).
     }
 
+    // Fungsi untuk mencetak pesan dalam bentuk tabel.
     public void printMessage(String message) {
         System.out.print("| ");
+
+        // Hitung panjang kosong yang diperlukan untuk perataan tengah pesan dalam tabel.
         int length = widthTabel - message.length() - 2;
+
+        // Cetak spasi pada bagian kiri pesan agar pesan terletak di tengah sel tabel.
         System.out.print(" ".repeat(length / 2) + message);
+
+        // Cek apakah panjang kosong genap atau ganjil, lalu cetak spasi yang sesuai di bagian kanan pesan.
         if (length % 2 == 0) {
             System.out.print(" ".repeat(length / 2));
         } else {
-            System.out.print(" ".repeat(length /2  + 1));
+            System.out.print(" ".repeat(length / 2 + 1));
         }
+
+        // Cetak garis batas kanan sel tabel dan pindah baris.
         System.out.print(" | \n");
     }
+
+    // Fungsi untuk mencetak pesan tombol "Keluar" dalam tabel.
+    // Parameter "index" digunakan untuk menentukan apakah baris tombol berada pada indeks genap atau ganjil.
+    public void messageExit(int index) {
+        if (index % 2 == 0) {
+            System.out.print("\033[34m"); // Mengatur warna teks ke biru (kode ANSI).
+            System.out.print("|" + " ".repeat(textLength[0]/2)
+                    + "0" + " ".repeat(textLength[0]/2) + "| ");
+        } else {
+            System.out.print("|" + " ".repeat(textLength[0]/2)
+                    + "0" + " ".repeat(textLength[0]/2+ 1) + "| ");
+        }
+
+        // Cetak teks "keluar" di dalam sel tombol, dengan spasi agar berada di tengah sel.
+        System.out.print("keluar" + " ".repeat(widthTabel - textLength[0] - 10) + "|");
+        System.out.println("\u001B[0m");  // Mengembalikan warna teks ke default (kode ANSI).
+    }
+
     // Fungsi untuk mencetak garis pembatas tabel.
     public void line() {
         System.out.println("|" + "=".repeat(widthTabel) + "|");

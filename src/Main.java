@@ -250,7 +250,7 @@ public class Main {
             System.out.println("Kembali ke menu utama.");
             return;
         }
-
+        newLine();
         try {
             // Coba untuk menghapus item berdasarkan pilihan kategori.
             if (!warehouseController.isCategoryExist(Integer.parseInt(choice) - 1)) {
@@ -272,7 +272,6 @@ public class Main {
     private static void removeItemByCategory(int indexCategory) {
         // Tampilkan daftar item dalam kategori.
         warehouseController.showItemsByCategories(indexCategory);
-        System.out.println("0. Keluar");
         String choice = inputHandler.getInputText("Pilih item yang ingin dihapus: ");
 
         // Jika pengguna memilih untuk keluar, kembali ke menu utama.
@@ -335,7 +334,7 @@ public class Main {
     private static void updateNameItemByCategory(int indexCategory) {
         // Tampilkan daftar item dalam kategori.
         warehouseController.showItemsByCategories(indexCategory);
-        System.out.println("0. Keluar");
+        
         String choice = inputHandler.getInputText("Pilih item yang ingin namanya diupdate: ");
 
         // Jika pengguna memilih untuk keluar, kembali ke menu utama.
@@ -414,7 +413,7 @@ public class Main {
     private static void updateStockItemByCategory(int categoryIndex) {
         // Tampilkan daftar item dalam kategori.
         warehouseController.showItemsByCategories(categoryIndex);
-        System.out.println("0. Keluar");
+        
         String choice = inputHandler.getInputText("Pilih item yang ingin stocknya diupdate: ");
 
         // Jika pengguna memilih untuk keluar, kembali ke menu utama.
@@ -476,7 +475,9 @@ public class Main {
         // Tampilkan semua item dalam setiap kategori.
         for (int indexCategory = 0; indexCategory < warehouseController.getSizeCategory(); indexCategory++) {
             warehouseController.showItemsByCategories(indexCategory);
+            System.out.println();
         }
+        inputHandler.delayInput();
     }
 
     // Fungsi untuk menampilkan baris baru sebanyak yang ditentukan.

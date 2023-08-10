@@ -11,17 +11,49 @@ public class WarehouseController {
     private final ArrayList<Category> category = new ArrayList<>();
     private final ArrayList<MessageLog> log = new ArrayList<>();
 
-    public WarehouseController () {
+    // Konstruktor untuk kelas WarehouseController.
+    public WarehouseController() {
+        // Inisialisasi kategori makanan
         category.add(new Category("makanan"));
-        category.get(0).addItem("nasi", 20);
-        category.get(0).addItem("ikan", 10);
-        category.get(0).addItem("ayam", 15);
+        // Tambahkan log untuk penambahan kategori makanan
+        log.add(new MessageLog("makanan", "Tambah Kategori"));
 
+        // Tambahkan item nasi ke dalam kategori makanan
+        category.get(0).addItem("nasi", 20);
+        // Tambahkan log untuk penambahan item nasi di kategori makanan
+        log.add(new MessageLog("nasi", "Tambah Item di Kategori makanan"));
+
+        // Tambahkan item ikan ke dalam kategori makanan
+        category.get(0).addItem("ikan", 10);
+        // Tambahkan log untuk penambahan item ikan di kategori makanan
+        log.add(new MessageLog("ikan", "Tambah Item di Kategori makanan"));
+
+        // Tambahkan item ayam ke dalam kategori makanan
+        category.get(0).addItem("ayam", 15);
+        // Tambahkan log untuk penambahan item ayam di kategori makanan
+        log.add(new MessageLog("ikan", "Tambah Item di Kategori makanan"));
+
+        // Inisialisasi kategori pakaian
         category.add(new Category("pakaian"));
+        // Tambahkan log untuk penambahan kategori pakaian
+        log.add(new MessageLog("pakaian", "Tambah Kategori"));
+
+        // Tambahkan item baju ke dalam kategori pakaian
         category.get(1).addItem("baju", 20);
+        // Tambahkan log untuk penambahan item baju di kategori pakaian
+        log.add(new MessageLog("baju", "Tambah Item di Kategori pakaian"));
+
+        // Tambahkan item syal ke dalam kategori pakaian
         category.get(1).addItem("syal", 10);
+        // Tambahkan log untuk penambahan item syal di kategori pakaian
+        log.add(new MessageLog("syal", "Tambah Item di Kategori pakaian"));
+
+        // Tambahkan item celana ke dalam kategori pakaian
         category.get(1).addItem("celana", 15);
+        // Tambahkan log untuk penambahan item celana di kategori pakaian
+        log.add(new MessageLog("celana", "Tambah Item di Kategori pakaian"));
     }
+
     // ================================ Category Section =======================================
 
     // Memeriksa apakah daftar kategori kosong.
@@ -219,8 +251,8 @@ public class WarehouseController {
                     category.get(categoryIndex).getItem(indexItem).getNameItem(),
                     String.valueOf(category.get(categoryIndex).getItem(indexItem).getQtyItem())});
         }
+        text.messageExit(category.get(categoryIndex).getItemSize());
         text.line();
-        System.out.println();
     }
 
     // Mencari item berdasarkan nama item.
@@ -288,7 +320,6 @@ public class WarehouseController {
                     new char[]{'c', 'l', 'l'},
                     new int[]{19, 30, 100});
 
-            text.line();
             text.printSubTitle();
             for (int indexLog = 0; indexLog < log.size(); indexLog++) {
                 text.printBody(indexLog,
