@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Text {
     private final String title;
     private final String[] subTitle;
-    private char[] alignment;
+    private final char[] alignment;
     private final int[] textLength;
 
     private final int widthTabel;
