@@ -7,9 +7,7 @@ public class Text {
     private final String[] subTitle;
     private final char[] alignment;
     private final int[] textLength;
-
     private final int widthTabel;
-
 
     // Konstruktor untuk kelas Text yang digunakan untuk mencetak teks dalam bentuk tabel.
     public Text(String title, String[] subTitle, char[] alignment, int[] textLength) {
