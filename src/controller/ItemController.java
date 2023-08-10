@@ -1,5 +1,6 @@
 package controller;
 
+import custom.Text;
 import database.Category;
 import database.Item;
 import input.InputHandler;
@@ -47,7 +48,8 @@ public class ItemController {
     }
 
     public String getNewIDItem(String itemName) {
-        return String.format("%03d", items.size());
+        if (items.size() == 0) return "1";
+        else return String.valueOf(Integer.parseInt(items.get(items.size()-1).getIdItem()) + 1);
     }
 
     public int getIndexItemByName(String itemName) {
@@ -114,10 +116,20 @@ public class ItemController {
     }
 
     public boolean showItems() {
-        if (items.size() == 0) { return false; }
-        for (Item item : items) {
-            System.out.println(item.getIdItem() + " - " + item.getNameItem());
+        if (items.size() == 0) return false;
+        Text text = new Text("",
+                new String[]{"ID", "Nama Item"},
+                new char[]{'c', 'l'},
+                new int[]{5, 50});
+        text.printSubTitle();
+        for (int index = 0; index < items.size(); index++) {
+            text.printBody(index, new String[]{
+                    items.get(index).getIdItem(),
+                    items.get(index).getNameItem()
+            });
         }
+        text.printBody(items.size(), new String[]{ "0", "Keluar" });
+        text.line();
         return true;
     }
 }

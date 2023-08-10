@@ -1,5 +1,6 @@
 package controller;
 
+import custom.Text;
 import database.Category;
 import database.Item;
 import database.TransactionCategoriesItems;
@@ -34,9 +35,25 @@ public class TransactionCategoriesItemsController {
             System.out.println("Belum ada relasi.");
             return;
         }
-        for (TransactionCategoriesItems transactionCategoriesItem : transactionCategoriesItems) {
-            System.out.println(transactionCategoriesItem.getCategory().getNameCategory() + " - "
-                    + transactionCategoriesItem.getItem().getNameItem());
+        Text text = new Text("",
+                new String[]{"Kategori", "Item"},
+                new char[]{'l', 'l'},
+                new int[]{20,20});
+        text.printSubTitle();
+        for (int index = 0; index < transactionCategoriesItems.size(); index++) {
+            text.printBody(index, new String[]{
+                    transactionCategoriesItems.get(index).getCategory().getNameCategory(),
+                    transactionCategoriesItems.get(index).getItem().getNameItem()
+            });
+        }
+        text.line();
+    }
+
+    public void getCategoriesByItem(Item item) {
+        for (int index = 0; index < transactionCategoriesItems.size(); index++) {
+            if (transactionCategoriesItems.get(index).getItem().equals(item)) {
+                System.out.println((index + 1) + ". " + transactionCategoriesItems.get(index).getCategory().getNameCategory());
+            }
         }
     }
 }

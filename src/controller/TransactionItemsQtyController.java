@@ -1,5 +1,6 @@
 package controller;
 
+import custom.Text;
 import database.Item;
 import database.TransactionItemsQty;
 
@@ -34,12 +35,23 @@ public class TransactionItemsQtyController {
 
     public void showTransaction() {
         if (transactionItemsQties.size() == 0) {
-            System.out.println("Belum ada relasi.");
+            System.out.println("Belum ada transaksi.");
             return;
         }
-        for (TransactionItemsQty transactionItemsQty : transactionItemsQties) {
-            System.out.println(transactionItemsQty.getItem().getNameItem() + " - "
-                    + transactionItemsQty.getQty());
+        Text text = new Text("",
+                new String[]{"Kategori", "Item"},
+                new char[]{'l', 'c'},
+                new int[]{30, 10});
+        text.printSubTitle();
+        for (int index = 0; index < transactionItemsQties.size(); index++) {
+            String qty = String.valueOf(transactionItemsQties.get(index).getQty());
+            if (transactionItemsQties.get(index).getQty() > 0){
+                qty = "+" + transactionItemsQties.get(index).getQty();
+            }
+            text.printBody(index, new String[]{
+                    transactionItemsQties.get(index).getItem().getNameItem(), qty
+            });
         }
+        text.line();
     }
 }

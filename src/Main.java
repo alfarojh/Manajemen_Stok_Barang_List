@@ -25,10 +25,11 @@ public class Main {
                     case 4 -> addItem();
                     case 5 -> removeItem();
                     case 6 -> updateNameItem();
-                    case 7 -> addItemToCategory();
-                    case 8 -> transactionCategoriesItemsController.showTransaction();
-//                    case 9 -> displayAllItems();
-//                    case 10 -> warehouseController.showLog();
+                    case 7 -> addTransactionItem();
+                    case 8 -> addItemToCategory();
+                    case 9 -> transactionCategoriesItemsController.showTransaction();
+                    case 10 -> transactionItemsQtyController.showTransaction();
+                    case 11 -> searchItem();
                     default -> inputHandler.errorMessage("Maaf, input diluar batas pilihan");
                 }
             } catch (Exception e) {
@@ -53,8 +54,11 @@ public class Main {
                 |  4.  Tambah Barang                    |
                 |  5.  Hapus Barang                     |
                 |  6.  Update Nama Barang               |
-                |  7.  Masukkan Barang ke Kategori      |
-                |  8.  Tampilkan Relasi Barang Kategori |
+                |  7.  Update Jumlah Barang             |
+                |  8.  Masukkan Barang ke Kategori      |
+                |  9.  Tampilkan Relasi Barang Kategori |
+                |  10. Tampilkan Transaksi Barang       |
+                |  11. Cari barang                      |
                 |  0.  Keluar                           |
                 |=======================================|
                 Silahkan masukkan pilihan:\s""";
@@ -75,7 +79,14 @@ public class Main {
     //========================================== Category Section ==========================================
 
     private static void addCategory() {
+        System.out.println("Ketik 0 atau 'keluar' untuk kembali ke menu utama.");
         String nameCategory = inputHandler.getInputText("Masukkan nama kategori baru: ");
+
+        if (nameCategory.equalsIgnoreCase("keluar") || nameCategory.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
+
         if (categoryController.addCategory(nameCategory)){
             System.out.println("Kategori berhasil ditambahkan.");
         } else {
@@ -93,20 +104,23 @@ public class Main {
         categoryController.showCategories();
         String inputCategory = inputHandler.getInputText("Pilih kategori: ");
 
+        if (inputCategory.equalsIgnoreCase("keluar") || inputCategory.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
+
         if (categoryController.isCategoryIDExist(inputCategory)) {
             String nameCategory = categoryController.getCategoryByID(inputCategory).getNameCategory();
             if (categoryController.removeCategoryByID(inputCategory)) {
                 System.out.println("Kategori " + nameCategory + " berhasil dihapus.");
-            } else {
-                inputHandler.errorMessage("Kategori ID tidak ditemukan, gagal menghapus.");
             }
-        } else {
+        } else if (categoryController.isCategoryNameExist(inputCategory)){
             String nameCategory = categoryController.getCategoryByName(inputCategory).getNameCategory();
             if (categoryController.removeCategoryByName(inputCategory)) {
                 System.out.println("Kategori " + nameCategory + " berhasil dihapus.");
-            } else {
-                inputHandler.errorMessage("Nama kategori tidak ditemukan, gagal menghapus.");
             }
+        } else {
+            inputHandler.errorMessage("Nama kategori tidak ditemukan, gagal menghapus.");
         }
         inputHandler.delayInput();
     }
@@ -120,7 +134,10 @@ public class Main {
         categoryController.showCategories();
         String inputCategory = inputHandler.getInputText("Pilih kategori: ");
 
-        if (!categoryController.isCategoryIDExist(inputCategory) && !categoryController.isCategoryNameExist(inputCategory)) {
+        if (inputCategory.equalsIgnoreCase("keluar") || inputCategory.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        } else if (!categoryController.isCategoryIDExist(inputCategory) && !categoryController.isCategoryNameExist(inputCategory)) {
             inputHandler.errorMessage("Kategori tidak ditemukan, kembali ke menu utama.");
             return;
         }
@@ -132,16 +149,12 @@ public class Main {
             if (categoryController.updateNameCategoryByID(inputCategory, newNameCategory)) {
                 System.out.println("Nama kategori berhasil diupdate dari "
                         + oldNameCategory + " menjadi " + newNameCategory + ".");
-            } else {
-                inputHandler.errorMessage("Kategori ID tidak ditemukan, gagal menghapus.");
             }
-        } else {
+        } else if (categoryController.isCategoryNameExist(inputCategory)){
             String oldNameCategory = categoryController.getCategoryByName(inputCategory).getNameCategory();
             if (categoryController.updateNameCategoryByName(inputCategory, newNameCategory)) {
                 System.out.println("Nama kategori berhasil diupdate dari "
                         + oldNameCategory + " menjadi " + newNameCategory + ".");
-            } else {
-                inputHandler.errorMessage("Nama kategori tidak ditemukan, gagal menghapus.");
             }
         }
     }
@@ -151,7 +164,14 @@ public class Main {
     //============================================ Item Section ============================================
 
     private static void addItem() {
+        System.out.println("Ketik 0 atau 'keluar' untuk kembali ke menu utama.");
         String nameItem = inputHandler.getInputText("Masukkan nama item baru: ");
+
+        if (nameItem.equalsIgnoreCase("keluar") || nameItem.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
+
         if (itemController.addItem(nameItem)){
             System.out.println("Item berhasil ditambahkan.");
         } else {
@@ -169,20 +189,23 @@ public class Main {
         itemController.showItems();
         String inputItem = inputHandler.getInputText("Pilih item: ");
 
+        if (inputItem.equalsIgnoreCase("keluar") || inputItem.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        }
+
         if (itemController.isItemIDExist(inputItem)) {
             String itemName = itemController.getItemyByID(inputItem).getNameItem();
             if (itemController.removeItemByID(inputItem)) {
                 System.out.println("Item " + itemName + " berhasil dihapus.");
-            } else {
-                inputHandler.errorMessage("Item ID tidak ditemukan, gagal menghapus.");
             }
-        } else {
+        } else if (itemController.isItemNameExist(inputItem)){
             String itemName = itemController.getItemyByName(inputItem).getNameItem();
             if (itemController.removeItemByName(inputItem)) {
                 System.out.println("Item " + itemName + " berhasil dihapus.");
-            } else {
-                inputHandler.errorMessage("Nama item tidak ditemukan, gagal menghapus.");
             }
+        } else {
+            inputHandler.errorMessage("Nama item tidak ditemukan, gagal menghapus.");
         }
         inputHandler.delayInput();
     }
@@ -195,8 +218,10 @@ public class Main {
 
         itemController.showItems();
         String inputItem = inputHandler.getInputText("Pilih item: ");
-
-        if (!itemController.isItemIDExist(inputItem) && !itemController.isItemNameExist(inputItem)) {
+        if (inputItem.equalsIgnoreCase("keluar") || inputItem.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        } else if (!itemController.isItemIDExist(inputItem) && !itemController.isItemNameExist(inputItem)) {
             inputHandler.errorMessage("Item tidak ditemukan, kembali ke menu utama.");
             return;
         }
@@ -208,16 +233,12 @@ public class Main {
             if (itemController.updateNameItemByID(inputItem, newNameItem)) {
                 System.out.println("Nama kategori berhasil diupdate dari "
                         + oldNameItem + " menjadi " + newNameItem + ".");
-            } else {
-                inputHandler.errorMessage("Item ID tidak ditemukan, gagal mengupdate.");
             }
-        } else {
+        } else if (itemController.isItemNameExist(inputItem)){
             String oldNameItem = itemController.getItemyByName(inputItem).getNameItem();
             if (itemController.updateNameItemByName(inputItem, newNameItem)) {
                 System.out.println("Nama kategori berhasil diupdate dari "
                         + oldNameItem + " menjadi " + newNameItem + ".");
-            } else {
-                inputHandler.errorMessage("Nama item tidak ditemukan, gagal mengupdate.");
             }
         }
     }
@@ -237,22 +258,23 @@ public class Main {
         itemController.showItems();
         String inputItem = inputHandler.getInputText("Pilih item: ");
 
-        if (!itemController.isItemIDExist(inputItem)) {
-            inputHandler.errorMessage("Item ID tidak ditemukan, kembali ke menu utama.");
+        if (inputItem.equalsIgnoreCase("keluar") || inputItem.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
             return;
-        } else if (!itemController.isItemNameExist(inputItem)) {
-            inputHandler.errorMessage("Nama item tidak ditemukan, kembali ke menu utama.");
+        } else if (!itemController.isItemIDExist(inputItem) && !itemController.isItemNameExist(inputItem)) {
+            inputHandler.errorMessage("Item tidak ditemukan, kembali ke menu utama.");
             return;
         }
 
+        newLine();
         categoryController.showCategories();
         String inputCategory = inputHandler.getInputText("Pilih kategori: ");
 
-        if (!categoryController.isCategoryIDExist(inputCategory)) {
-            inputHandler.errorMessage("Kategori ID tidak ditemukan, kembali ke menu utama.");
+        if (inputCategory.equalsIgnoreCase("keluar") || inputCategory.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
             return;
-        } else if (!categoryController.isCategoryNameExist(inputCategory)) {
-            inputHandler.errorMessage("Nama kategori tidak ditemukan, kembali ke menu utama.");
+        } else if (!categoryController.isCategoryIDExist(inputCategory) && !categoryController.isCategoryNameExist(inputCategory)) {
+            inputHandler.errorMessage("Kategori ID tidak ditemukan, kembali ke menu utama.");
             return;
         }
 
@@ -266,7 +288,7 @@ public class Main {
                             + categoryController.getCategoryByName(inputCategory).getNameCategory());
                 } else {
                     inputHandler.errorMessage("Item " + itemController.getItemyByName(inputItem).getNameItem()
-                            + " gagal ditambahkan ke dalam kategori "
+                            + " sudah ditambahkan ke dalam kategori "
                             + categoryController.getCategoryByName(inputCategory).getNameCategory());
                 }
             } else {
@@ -278,7 +300,7 @@ public class Main {
                             + categoryController.getCategoryByName(inputCategory).getNameCategory());
                 } else {
                     inputHandler.errorMessage("Item " + itemController.getItemyByID(inputItem).getNameItem()
-                            + " gagal dimasukkan ke dalam kategori "
+                            + " sudah dimasukkan ke dalam kategori "
                             + categoryController.getCategoryByName(inputCategory).getNameCategory());
                 }
             }
@@ -292,7 +314,7 @@ public class Main {
                             + categoryController.getCategoryByID(inputCategory).getNameCategory());
                 } else {
                     inputHandler.errorMessage("Item " + itemController.getItemyByName(inputItem).getNameItem()
-                            + " gagal dimasukkan ke dalam kategori "
+                            + " sudah dimasukkan ke dalam kategori "
                             + categoryController.getCategoryByID(inputCategory).getNameCategory());
                 }
 
@@ -305,12 +327,74 @@ public class Main {
                             + categoryController.getCategoryByID(inputCategory).getNameCategory());
                 } else {
                     inputHandler.errorMessage("Item " + itemController.getItemyByID(inputItem).getNameItem()
-                            + " gagal dimasukkan ke dalam kategori "
+                            + " sudah dimasukkan ke dalam kategori "
                             + categoryController.getCategoryByID(inputCategory).getNameCategory());
                 }
 
             }
         }
+    }
+
+    private static void addTransactionItem() {
+        if (itemController.getItemsSize() == 0) {
+            inputHandler.errorMessage("Item kosong, kembali ke menu utama.");
+            return;
+        }
+
+        itemController.showItems();
+        String inputItem = inputHandler.getInputText("Pilih item: ");
+
+        if (inputItem.equalsIgnoreCase("keluar") || inputItem.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        } else if (!itemController.isItemIDExist(inputItem) && !itemController.isItemNameExist(inputItem)) {
+            inputHandler.errorMessage("Item tidak ditemukan, kembali ke menu utama.");
+            return;
+        }
+
+        int qty = inputHandler.getIntegerInputWithOperator("Masukkan jumlah (+/-): ");
+
+        if (itemController.isItemIDExist(inputItem)) {
+            if (transactionItemsQtyController.addTransaction(itemController.getItemyByID(inputItem), qty)) {
+                System.out.println("Transaksi item " + itemController.getItemyByID(inputItem).getNameItem() + " berhasil.");
+            } else {
+                inputHandler.errorMessage("Gagal melakukan transaksi, sisa barang digudang "
+                        + transactionItemsQtyController.getAmountQty(itemController.getItemyByID(inputItem)));
+            }
+        } else if(itemController.isItemNameExist(inputItem)) {
+            if (transactionItemsQtyController.addTransaction(itemController.getItemyByName(inputItem), qty)) {
+                System.out.println("Transaksi item " + itemController.getItemyByName(inputItem).getNameItem() + " berhasil.");
+            } else {
+                inputHandler.errorMessage("Gagal melakukan transaksi, sisa barang digudang "
+                        + transactionItemsQtyController.getAmountQty(itemController.getItemyByName(inputItem)));
+            }
+        } else {
+            inputHandler.errorMessage("Transaksi batal.");
+        }
+
+    }
+
+    private static void searchItem() {
+        if (itemController.getItemsSize() == 0) {
+            inputHandler.errorMessage("Item kosong, kembali ke menu utama.");
+            return;
+        }
+
+        System.out.println("Ketik 0 atau 'keluar' untuk kembali ke menu utama.");
+        String nameItem = inputHandler.getInputText("Masukkan nama item yang ingin dicari: ");
+
+        if (nameItem.equalsIgnoreCase("keluar") || nameItem.equals("0")) {
+            System.out.println("Kembali ke menu utama.");
+            return;
+        } else if (!itemController.isItemNameExist(nameItem)) {
+            inputHandler.errorMessage("Item tidak ditemukan");
+            return;
+        }
+
+        System.out.println("Nama item: " + nameItem);
+        System.out.println("Termasuk kategori: ");
+        transactionCategoriesItemsController.getCategoriesByItem(itemController.getItemyByName(nameItem));
+        System.out.println("Stok digudang: " + transactionItemsQtyController.getAmountQty(itemController.getItemyByName(nameItem)));
     }
 
     //============================================ Transaction =============================================

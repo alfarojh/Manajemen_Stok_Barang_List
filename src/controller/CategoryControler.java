@@ -1,5 +1,6 @@
 package controller;
 
+import custom.Text;
 import database.Category;
 import input.InputHandler;
 
@@ -26,6 +27,7 @@ public class CategoryControler {
         if (indexCategory < 0) return null;
         return categories.get(indexCategory);
     }
+
     public boolean isCategoryNameExist(String categoryName) {
         for (Category category : categories) {
             if (category.getNameCategory().equalsIgnoreCase(categoryName)) {
@@ -44,8 +46,9 @@ public class CategoryControler {
         return false;
     }
 
-    public String getNewIDCategory(String categoryName) {
-        return String.format("%03d", categories.size());
+    public String getNewIDCategory() {
+        if (categories.size() == 0) return "1";
+        else return String.valueOf(Integer.parseInt(categories.get(categories.size()-1).getIdCategory()) + 1);
     }
 
     public int getIndexCategoryByName(String categoryName) {
@@ -87,7 +90,7 @@ public class CategoryControler {
                 return false;
             }
         }
-        categories.add(new Category(getNewIDCategory(categoryName), categoryName));
+        categories.add(new Category(getNewIDCategory(), categoryName));
         return true;
     }
 
@@ -117,9 +120,19 @@ public class CategoryControler {
 
     public boolean showCategories() {
         if (categories.size() == 0) return false;
-        for (Category category : categories) {
-            System.out.println(category.getIdCategory() + " - " + category.getNameCategory());
+        Text text = new Text("",
+                new String[]{"ID", "Nama Kategori"},
+                new char[]{'c', 'l'},
+                new int[]{5, 50});
+        text.printSubTitle();
+        for (int index = 0; index < categories.size(); index++) {
+            text.printBody(index, new String[]{
+                    categories.get(index).getIdCategory(),
+                    categories.get(index).getNameCategory()
+            });
         }
+        text.printBody(categories.size(), new String[]{ "0", "Keluar" });
+        text.line();
         return true;
     }
 }
