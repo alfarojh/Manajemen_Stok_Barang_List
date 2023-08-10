@@ -170,14 +170,16 @@ public class Main {
         String inputItem = inputHandler.getInputText("Pilih item: ");
 
         if (itemController.isItemIDExist(inputItem)) {
+            String itemName = itemController.getItemyByID(inputItem).getNameItem();
             if (itemController.removeItemByID(inputItem)) {
-                System.out.println("Item berhasil dihapus.");
+                System.out.println("Item " + itemName + " berhasil dihapus.");
             } else {
                 inputHandler.errorMessage("Item ID tidak ditemukan, gagal menghapus.");
             }
         } else {
-            if (itemController.isItemNameExist(inputItem)) {
-                System.out.println("Item berhasil dihapus.");
+            String itemName = itemController.getItemyByName(inputItem).getNameItem();
+            if (itemController.removeItemByName(inputItem)) {
+                System.out.println("Item " + itemName + " berhasil dihapus.");
             } else {
                 inputHandler.errorMessage("Nama item tidak ditemukan, gagal menghapus.");
             }
@@ -194,27 +196,28 @@ public class Main {
         itemController.showItems();
         String inputItem = inputHandler.getInputText("Pilih item: ");
 
-        if (!itemController.isItemIDExist(inputItem)) {
-            inputHandler.errorMessage("Item ID tidak ditemukan, kembali ke menu utama.");
-            return;
-        } else if (!itemController.isItemNameExist(inputItem)) {
-            inputHandler.errorMessage("Nama item tidak ditemukan, kembali ke menu utama.");
+        if (!itemController.isItemIDExist(inputItem) && !itemController.isItemNameExist(inputItem)) {
+            inputHandler.errorMessage("Item tidak ditemukan, kembali ke menu utama.");
             return;
         }
 
-        String newNameCategory = inputHandler.getInputText("Masukkan nama item baru: ");
+        String newNameItem = inputHandler.getInputText("Masukkan nama item baru: ");
 
         if (itemController.isItemIDExist(inputItem)) {
-            if (itemController.updateNameItemByID(inputItem, newNameCategory)) {
-                System.out.println("Item berhasil dihapus.");
+            String oldNameItem = itemController.getItemyByID(inputItem).getNameItem();
+            if (itemController.updateNameItemByID(inputItem, newNameItem)) {
+                System.out.println("Nama kategori berhasil diupdate dari "
+                        + oldNameItem + " menjadi " + newNameItem + ".");
             } else {
-                inputHandler.errorMessage("Item ID tidak ditemukan, gagal menghapus.");
+                inputHandler.errorMessage("Item ID tidak ditemukan, gagal mengupdate.");
             }
         } else {
-            if (itemController.updateNameItemByID(inputItem, newNameCategory)) {
-                System.out.println("Item berhasil dihapus.");
+            String oldNameItem = itemController.getItemyByName(inputItem).getNameItem();
+            if (itemController.updateNameItemByName(inputItem, newNameItem)) {
+                System.out.println("Nama kategori berhasil diupdate dari "
+                        + oldNameItem + " menjadi " + newNameItem + ".");
             } else {
-                inputHandler.errorMessage("Nama item tidak ditemukan, gagal menghapus.");
+                inputHandler.errorMessage("Nama item tidak ditemukan, gagal mengupdate.");
             }
         }
     }
