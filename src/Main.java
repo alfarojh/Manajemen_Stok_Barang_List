@@ -3,7 +3,10 @@ import controller.ItemController;
 import controller.TransactionCategoriesItemsController;
 import controller.TransactionItemsQtyController;
 import custom.DisplayPrint;
+import database.Item;
 import input.InputHandler;
+
+import java.util.ArrayList;
 
 public class Main {
     private static final InputHandler inputHandler = new InputHandler();
@@ -14,6 +17,7 @@ public class Main {
     private static final DisplayPrint displayPrint = new DisplayPrint();
 
     public static void main(String[] args) {
+        inisiasi();
         while (true) {
             try {
                 // Menampilkan menu dan mendapatkan pilihan dari pengguna
@@ -94,8 +98,7 @@ public class Main {
                 }
             } catch (Exception e) {
                 // Menangkap dan menampilkan pesan jika terjadi exception (kesalahan)
-//                System.out.println("Keluar dari program");
-                e.printStackTrace();
+                System.out.println("Keluar dari program");
                 break; // Keluar dari perulangan untuk mengakhiri program
             }
             newLine(5);
@@ -115,6 +118,21 @@ public class Main {
         }
     }
 
+    private static void inisiasi() {
+        categoryController.addCategory("makanan");
+        categoryController.addCategory("minuman");
+        categoryController.addCategory("binatang");
+        itemController.addItem("nasi");
+        transactionItemsQtyController.addTransaction(itemController.getItemByName("nasi"), 20);
+        itemController.addItem("ikan");
+        transactionItemsQtyController.addTransaction(itemController.getItemByName("ikan"), 10);
+        itemController.addItem("ikan goreng");
+        transactionItemsQtyController.addTransaction(itemController.getItemByName("ikan goreng"), 5);
+        itemController.addItem("ayam");
+        transactionItemsQtyController.addTransaction(itemController.getItemByName("ayam"), 15);
+        itemController.addItem("ikan bakar");
+        transactionItemsQtyController.addTransaction(itemController.getItemByName("ikan bakar"), 25);
+    }
     //========================================== Category Section ==========================================
 
     // Fungsi untuk menambah kategori baru
@@ -232,6 +250,7 @@ public class Main {
             return;
         }
         categoryController.showCategories(); // Menampilkan daftar kategori jika ada.
+        inputHandler.delayInput();
     }
 
     //========================================== Category Section ==========================================
@@ -252,7 +271,13 @@ public class Main {
 
         // Menambahkan item baru dengan memanggil itemController.addItem()
         if (itemController.addItem(nameItem)) {
+            int qty = inputHandler.getIntegerInput("Masukkan jumlah: ");
             System.out.println("Item berhasil ditambahkan.");
+            if (transactionItemsQtyController.addTransaction(itemController.getItemByName(nameItem), qty)) {
+                System.out.println("Transaksi ditambahkan ke log.");
+            } else {
+                inputHandler.errorMessage("Transaksi dibatalkan, jumlah item di set 0.");
+            }
         } else {
             inputHandler.errorMessage("Item gagal ditambahkan.");
         }
@@ -351,7 +376,7 @@ public class Main {
             addItem(); // Memanggil fungsi untuk menambahkan item.
             return;
         }
-        itemController.showItems(); // Menampilkan daftar item jika ada.
+        transactionItemsQtyController.showAmountItem(); // Menampilkan daftar item jika ada.
         inputHandler.delayInput();
     }
 
@@ -454,6 +479,10 @@ public class Main {
         // Meminta input jumlah transaksi
         int qty = inputHandler.getIntegerInputWithOperator("Masukkan jumlah (+/-): ");
 
+        if (qty == 0) {
+            System.out.println("Transaksi batal, kembali ke menu utama.\n");
+            return;
+        }
         // Memproses transaksi item
         if (itemController.isItemIDExist(inputItem)) {
             if (transactionItemsQtyController.addTransaction(itemController.getItemByID(inputItem), qty)) {
@@ -484,23 +513,51 @@ public class Main {
 
         System.out.println("Ketik 0 atau 'keluar' untuk kembali ke menu utama.");
         // Meminta input nama item yang akan dicari
-        String nameItem = inputHandler.getInputText("Masukkan nama item yang ingin dicari: ");
+        String inputItem = inputHandler.getInputText("Masukkan nama item yang ingin dicari: ");
+        ArrayList<Item> similiarName = itemController.findItemsByMatchingLetter(inputItem);
+
+        while (similiarName.size() > 1 && itemController.isItemNameExist(inputItem)) {
+            System.out.println("\nTerdapat beberapa nama item yang mirip: ");
+            for (Item item : similiarName) {
+                System.out.println(item.getIdItem() + " - " + item.getNameItem());
+            }
+
+            System.out.println("\nKetik 0 atau 'keluar' untuk kembali ke menu utama.");
+            inputItem = inputHandler.getInputText("Masukkan nama item yang ingin dicari: ");
+
+            // Pengguna memilih untuk kembali ke menu utama
+            if (inputItem.equalsIgnoreCase("keluar") || inputItem.equals("0")) {
+                System.out.println("Kembali ke menu utama.\n");
+                return;
+            }
+            // Pengguna memasukkan ID item yang valid
+            else if (itemController.isItemIDExist(inputItem)) {
+                inputItem = itemController.getNameByIDItem(inputItem);
+                break;
+            }
+            // Pengguna memasukkan nama item yang valid
+            else if (itemController.isItemNameExist(inputItem)) {
+                break;
+            }
+            // Memperbarui daftar item yang mirip berdasarkan input pengguna
+            similiarName = itemController.findItemsByMatchingLetter(inputItem);
+        }
 
         // Memeriksa apakah pengguna ingin keluar atau kembali ke menu utama,
         // serta apakah item yang dicari ada dalam daftar item
-        if (nameItem.equalsIgnoreCase("keluar") || nameItem.equals("0")) {
+        if (inputItem.equalsIgnoreCase("keluar") || inputItem.equals("0")) {
             System.out.println("Kembali ke menu utama.");
             return;
-        } else if (!itemController.isItemNameExist(nameItem)) {
+        } else if (!itemController.isItemNameExist(inputItem)) {
             inputHandler.errorMessage("Item tidak ditemukan");
             return;
         }
 
         // Menampilkan informasi tentang item yang dicari
-        System.out.println("Nama item: " + nameItem);
+        System.out.println("\nNama item: " + inputItem);
         System.out.println("Termasuk kategori: ");
-        transactionCategoriesItemsController.getCategoriesByItem(itemController.getItemByName(nameItem));
-        System.out.println("Stok digudang: " + transactionItemsQtyController.getAmountQty(itemController.getItemByName(nameItem)));
+        transactionCategoriesItemsController.getCategoriesByItem(itemController.getItemByName(inputItem));
+        System.out.println("Stok digudang: " + transactionItemsQtyController.getAmountQty(itemController.getItemByName(inputItem)));
         inputHandler.delayInput();
     }
 

@@ -136,12 +136,10 @@ public class CategoryControler {
 
     // Fungsi ini menambahkan kategori baru.
     public boolean addCategory(String categoryName) {
-        // Jika nama kategori sudah ada, tanyakan kepada pengguna apakah ingin melanjutkan.
+        // Jika nama kategori sudah ada, kembalikan false.
         if (isCategoryNameExist(categoryName)) {
-            String choice = new InputHandler().getInputText("Nama kategori sudah ada, ingin tetap melanjutkan (Y/n)?  ");
-            if (!choice.equals("Y")) {
-                return false; // Pengguna memilih untuk tidak melanjutkan.
-            }
+            System.out.println("Kategori sudah ada.");
+            return false;
         }
         // Tambahkan kategori baru ke dalam daftar.
         categories.add(new Category(getNewIDCategory(), categoryName));
@@ -169,7 +167,7 @@ public class CategoryControler {
     // Fungsi ini mengupdate nama kategori berdasarkan ID.
     public boolean updateNameCategoryByID(String categoryID, String newNameCategory) {
         // Jika ID kategori tidak ada, kembalikan false.
-        if (!isCategoryIDExist(categoryID)) return false;
+        if (!isCategoryIDExist(categoryID) || isCategoryNameExist(newNameCategory)) return false;
         // Update nama kategori berdasarkan ID.
         categories.get(getIndexCategoryByID(categoryID)).setNameCategory(newNameCategory);
         return true;
@@ -178,7 +176,7 @@ public class CategoryControler {
     // Fungsi ini mengupdate nama kategori berdasarkan nama.
     public boolean updateNameCategoryByName(String categoryName, String newNameCategory) {
         // Jika nama kategori tidak ada, kembalikan false.
-        if (!isCategoryNameExist(categoryName)) return false;
+        if (!isCategoryNameExist(categoryName) || isCategoryNameExist(newNameCategory)) return false;
         // Update nama kategori berdasarkan nama.
         categories.get(getIndexCategoryByName(categoryName)).setNameCategory(newNameCategory);
         return true;
@@ -197,7 +195,7 @@ public class CategoryControler {
         // Iterasi melalui daftar kategori dan tampilkan setiap entri.
         for (int index = 0; index < categories.size(); index++) {
             text.printBody(index, new String[]{
-                    categories.get(index).getIdCategory(),
+                    String.format("%03d", Integer.parseInt(categories.get(index).getIdCategory())),
                     categories.get(index).getNameCategory()
             });
         }

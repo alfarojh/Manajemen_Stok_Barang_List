@@ -34,7 +34,7 @@ public class InputHandler {
         // Melakukan validasi untuk memastikan input hanya berisi digit dan merupakan bilangan positif atau negatif
         while (!input.matches("\\d+")) {
             // Jika input tidak valid, tampilkan pesan kesalahan dan minta input lagi
-            errorMessage("Maaf, harap masukkan input berupa bilangan bulat");
+            errorMessage("Maaf, harap masukkan input berupa bilangan bulat dan positif");
             System.out.print(message);
             input = scanner.nextLine();
         }

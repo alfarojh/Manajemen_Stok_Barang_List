@@ -25,6 +25,17 @@ public class ItemController {
         else return String.valueOf(Integer.parseInt(items.get(items.size()-1).getIdItem()) + 1);
     }
 
+    public ArrayList<Item> findItemsByMatchingLetter(String itemName) {
+        ArrayList<Item> items1 = new ArrayList<>();
+        // Iterasi melalui daftar item dan memeriksa kesamaan nama item.
+        for (Item item : items) {
+            if (item.getNameItem().contains(itemName)) {
+                items1.add(item);
+            }
+        }
+        return items1;
+    }
+
     // Fungsi ini mendapatkan objek Item berdasarkan nama.
     public Item getItemByName(String itemName) {
         // Mendapatkan indeks item berdasarkan nama.
@@ -114,7 +125,7 @@ public class ItemController {
     // Fungsi ini mendapatkan nama item berdasarkan ID.
     public String getNameByIDItem(String itemID) {
         // Mendapatkan indeks item berdasarkan ID.
-        int indexItem = getIndexItemByName(itemID);
+        int indexItem = getIndexItemByID(itemID);
         // Mengembalikan nama item dari objek item yang ditemukan.
         return items.get(indexItem).getNameItem();
     }
@@ -123,12 +134,10 @@ public class ItemController {
 
     // Fungsi ini menambahkan item baru.
     public boolean addItem(String itemName) {
-        // Jika nama item sudah ada, tanyakan kepada pengguna apakah ingin melanjutkan.
-        if (isItemNameExist(itemName)) {
-            String choice = new InputHandler().getInputText("Nama item sudah ada, ingin tetap melanjutkan (Y/n)?  ");
-            if (!choice.equals("Y")) {
-                return false; // Pengguna memilih untuk tidak melanjutkan.
-            }
+        // Jika nama item sudah ada, kembalikan false.
+        if (isItemNameExist(itemName)){
+            System.out.println("Item sudah ada.");
+            return false;
         }
         // Tambahkan item baru ke dalam daftar.
         items.add(new Item(getNewIDItem(itemName), itemName));
@@ -156,7 +165,7 @@ public class ItemController {
     // Fungsi ini mengupdate nama item berdasarkan ID.
     public boolean updateNameItemByID(String itemId, String newNameItem) {
         // Jika ID item tidak ada, kembalikan false.
-        if (!isItemIDExist(itemId)) return false;
+        if (!isItemIDExist(itemId) || isItemNameExist(newNameItem)) return false;
         // Update nama item berdasarkan ID.
         items.get(getIndexItemByID(itemId)).setNameItem(newNameItem);
         return true;
@@ -165,7 +174,7 @@ public class ItemController {
     // Fungsi ini mengupdate nama item berdasarkan nama.
     public boolean updateNameItemByName(String itemName, String newNameItem) {
         // Jika nama item tidak ada, kembalikan false.
-        if (!isItemNameExist(itemName)) return false;
+        if (!isItemNameExist(itemName) || isItemNameExist(newNameItem)) return false;
         // Update nama item berdasarkan nama.
         items.get(getIndexItemByName(itemName)).setNameItem(newNameItem);
         return true;
@@ -184,7 +193,7 @@ public class ItemController {
         // Iterasi melalui daftar item dan tampilkan setiap entri.
         for (int index = 0; index < items.size(); index++) {
             text.printBody(index, new String[]{
-                    items.get(index).getIdItem(),
+                    String.format("%03d", Integer.parseInt(items.get(index).getIdItem())),
                     items.get(index).getNameItem()
             });
         }
