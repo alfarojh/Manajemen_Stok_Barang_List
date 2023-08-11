@@ -36,6 +36,9 @@ public class ItemController {
         return items1;
     }
 
+    public ArrayList<Item> getItems() {
+        return items;
+    }
     // Fungsi ini mendapatkan objek Item berdasarkan nama.
     public Item getItemByName(String itemName) {
         // Mendapatkan indeks item berdasarkan nama.
@@ -96,7 +99,7 @@ public class ItemController {
     public int getIndexItemByName(String itemName) {
         // Iterasi melalui daftar item dan mencari indeks dengan nama yang cocok.
         for (int indexItem = 0; indexItem < items.size(); indexItem++) {
-            if(items.get(indexItem).getNameItem().equals(itemName)){
+            if(items.get(indexItem).getNameItem().equalsIgnoreCase(itemName)){
                 return indexItem; // Mengembalikan indeks jika ditemukan.
             }
         }
@@ -193,7 +196,7 @@ public class ItemController {
         // Iterasi melalui daftar item dan tampilkan setiap entri.
         for (int index = 0; index < items.size(); index++) {
             text.printBody(index, new String[]{
-                    String.format("%03d", Integer.parseInt(items.get(index).getIdItem())),
+                    items.get(index).getIdItem(),
                     items.get(index).getNameItem()
             });
         }

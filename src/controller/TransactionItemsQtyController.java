@@ -69,7 +69,7 @@ public class TransactionItemsQtyController {
     }
 
     // Fungsi ini menampilkan seluruh stok item.
-    public void showAmountItem() {
+    public void showAmountItem(ArrayList<Item> items) {
         // Jika daftar transaksi kuantitas item kosong, tampilkan pesan.
         if (transactionItemsQties.size() == 0) {
             System.out.println("Belum ada transaksi.");
@@ -82,10 +82,11 @@ public class TransactionItemsQtyController {
                 new int[]{5, 30, 10});
         text.printSubTitle(); // Tampilkan judul tabel.
         // Mencetak informasi nama item dan kuantitas
-        for (int index = 0; index < transactionItemsQties.size(); index++) {
+
+        for (int index = 0; index < items.size(); index++) {
             text.printBody(index, new String[]{
-                    transactionItemsQties.get(index).getItem().getIdItem(),
-                    transactionItemsQties.get(index).getItem().getNameItem(),
+                    items.get(index).getIdItem(),
+                    items.get(index).getNameItem(),
                     String.valueOf(getAmountQty(transactionItemsQties.get(index).getItem()))
             });
         }

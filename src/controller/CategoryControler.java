@@ -125,7 +125,7 @@ public class CategoryControler {
     // Fungsi ini mendapatkan nama berdasarkan ID kategori.
     public String getNameByIDCategory(String categoryID) {
         // Mendapatkan indeks kategori berdasarkan ID kategori.
-        int indexCategory = getIndexCategoryByName(categoryID);
+        int indexCategory = getIndexCategoryByID(categoryID);
         // Jika indeks negatif, mengembalikan nilai null.
         if (indexCategory < 0) return null;
         // Mengembalikan nama kategori dari objek kategori yang ditemukan.
@@ -195,7 +195,7 @@ public class CategoryControler {
         // Iterasi melalui daftar kategori dan tampilkan setiap entri.
         for (int index = 0; index < categories.size(); index++) {
             text.printBody(index, new String[]{
-                    String.format("%03d", Integer.parseInt(categories.get(index).getIdCategory())),
+                    categories.get(index).getIdCategory(),
                     categories.get(index).getNameCategory()
             });
         }

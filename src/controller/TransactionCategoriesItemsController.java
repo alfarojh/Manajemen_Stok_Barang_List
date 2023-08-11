@@ -63,10 +63,15 @@ public class TransactionCategoriesItemsController {
     // Fungsi ini menampilkan kategori-kategori yang terkait dengan suatu item.
     public void getCategoriesByItem(Item item) {
         // Iterasi melalui daftar transaksi dan tampilkan kategori yang terkait dengan item.
+        boolean notExist = true;
         for (int index = 0; index < transactionCategoriesItems.size(); index++) {
             if (transactionCategoriesItems.get(index).getItem().equals(item)) {
                 System.out.println((index + 1) + ". " + transactionCategoriesItems.get(index).getCategory().getNameCategory());
+                notExist = false;
             }
+        }
+        if (notExist) {
+            System.out.println("Tidak ada kategori.");
         }
     }
 

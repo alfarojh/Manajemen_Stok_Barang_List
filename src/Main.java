@@ -105,6 +105,7 @@ public class Main {
         }
         inputHandler.close();
     }
+
     // Fungsi untuk menampilkan baris baru sebanyak yang ditentukan.
     private static void newLine(int... count) {
         // Jika parameter count diberikan, cetak baris baru sebanyak count[0] kali.
@@ -214,6 +215,11 @@ public class Main {
         // Memeriksa apakah pengguna ingin kembali ke menu utama
         if (inputCategory.equalsIgnoreCase("keluar") || inputCategory.equals("0")) {
             System.out.println("Kembali ke menu utama.");
+            newLine();
+            return;
+        } else if (!categoryController.isCategoryIDExist(inputCategory) &&
+                !categoryController.isCategoryNameExist(inputCategory)) {
+            System.out.println("Kategori tidak ditemukan, kembali ke menu utama.");
             newLine();
             return;
         }
@@ -341,6 +347,11 @@ public class Main {
             System.out.println("Kembali ke menu utama.");
             newLine();
             return;
+        } else if (!itemController.isItemIDExist(inputItem) &&
+                !itemController.isItemNameExist(inputItem)) {
+            System.out.println("Item tidak ditemukan, kembali ke menu utama.");
+            newLine();
+            return;
         }
 
         // Meminta input untuk nama item baru dan melakukan pembaruan nama item
@@ -376,7 +387,7 @@ public class Main {
             addItem(); // Memanggil fungsi untuk menambahkan item.
             return;
         }
-        transactionItemsQtyController.showAmountItem(); // Menampilkan daftar item jika ada.
+        transactionItemsQtyController.showAmountItem(itemController.getItems()); // Menampilkan daftar item jika ada.
         inputHandler.delayInput();
     }
 
@@ -438,16 +449,16 @@ public class Main {
         if (nameCategory != null && nameItem != null) {
             // Jika item berhasil ditambahkan ke kategori
             if (transactionCategoriesItemsController.addTransaction(
-                    categoryController.getCategoryByName(inputCategory),
-                    itemController.getItemByName(inputItem))) {
-                System.out.println("Item " + itemController.getItemByName(inputItem).getNameItem()
+                    categoryController.getCategoryByName(nameCategory),
+                    itemController.getItemByName(nameItem))) {
+                System.out.println("Item " + itemController.getItemByName(nameItem).getNameItem()
                         + " berhasil dimasukkan ke dalam kategori "
-                        + categoryController.getCategoryByName(inputCategory).getNameCategory());
+                        + categoryController.getCategoryByName(nameCategory).getNameCategory());
             } else {
                 // Jika item sudah ada dalam kategori
-                inputHandler.errorMessage("Item " + itemController.getItemByName(inputItem).getNameItem()
+                inputHandler.errorMessage("Item " + itemController.getItemByName(nameItem).getNameItem()
                         + " sudah ditambahkan ke dalam kategori "
-                        + categoryController.getCategoryByName(inputCategory).getNameCategory());
+                        + categoryController.getCategoryByName(nameCategory).getNameCategory());
             }
         }
 
