@@ -1,135 +1,197 @@
 package controller;
 
 import custom.Text;
-import database.Category;
 import database.Item;
 import input.InputHandler;
 
 import java.util.ArrayList;
 
 public class ItemController {
-    private final ArrayList<Item> items = new ArrayList<>();
-    
+    private final ArrayList<Item> items;
+
+    // Konstruktor untuk inisialisasi ArrayList items.
     public ItemController() {
-        
+        this.items = new ArrayList<>();
     }
+
+    // Mengembalikan jumlah item yang ada.
     public int getItemsSize() {
         return items.size();
     }
 
-    public Item getItemyByName(String itemName) {
-        int indexCategory = getIndexItemByName(itemName);
-        if (indexCategory < 0) return null;
-        return items.get(indexCategory);
-    }
-
-    public Item getItemyByID(String itemID) {
-        int indexCategory = getIndexItemByID(itemID);
-        if (indexCategory < 0) return null;
-        return items.get(indexCategory);
-    }
-
-    public boolean isItemNameExist(String itemName) {
-        for (Item item : items) {
-            if (item.getNameItem().equalsIgnoreCase(itemName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    public boolean isItemIDExist(String itemID) {
-        for (Item item : items) {
-            if (item.getIdItem().equalsIgnoreCase(itemID)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
+    // Menghasilkan ID baru untuk item.
     public String getNewIDItem(String itemName) {
         if (items.size() == 0) return "1";
         else return String.valueOf(Integer.parseInt(items.get(items.size()-1).getIdItem()) + 1);
     }
 
+    // Fungsi ini mendapatkan objek Item berdasarkan nama.
+    public Item getItemByName(String itemName) {
+        // Mendapatkan indeks item berdasarkan nama.
+        int indexItem = getIndexItemByName(itemName);
+        // Jika indeks negatif, mengembalikan nilai null.
+        if (indexItem < 0) return null;
+        // Mengembalikan objek Item dari daftar.
+        return items.get(indexItem);
+    }
+
+    // Fungsi ini mendapatkan objek Item berdasarkan ID.
+    public Item getItemByID(String itemID) {
+        // Mendapatkan indeks item berdasarkan ID.
+        int indexItem = getIndexItemByID(itemID);
+        // Jika indeks negatif, mengembalikan nilai null.
+        if (indexItem < 0) return null;
+        // Mengembalikan objek Item dari daftar.
+        return items.get(indexItem);
+    }
+
+    // Fungsi ini mengembalikan nama item berdasarkan input.
+    public String getNameItemByInput (String categoryInput) {
+        if (isItemNameExist(categoryInput)) return categoryInput;
+        else if(isItemIDExist(categoryInput)) return getNameByIDItem(categoryInput);
+        else return null;
+    }
+
+    // Mengembalikan ID kategori berdasarkan input.
+    public String getIDItemByInput (String categoryInput) {
+        if (isItemIDExist(categoryInput)) return categoryInput;
+        else if(isItemNameExist(categoryInput)) return getIDByNameItem(categoryInput);
+        else return null;
+    }
+
+    // Fungsi ini memeriksa apakah nama item sudah ada.
+    public boolean isItemNameExist(String itemName) {
+        // Iterasi melalui daftar item dan memeriksa kesamaan nama item.
+        for (Item item : items) {
+            if (item.getNameItem().equalsIgnoreCase(itemName)) {
+                return true; // Jika ditemukan, mengembalikan true.
+            }
+        }
+        return false; // Jika tidak ditemukan, mengembalikan false.
+    }
+
+    // Fungsi ini memeriksa apakah ID item sudah ada.
+    public boolean isItemIDExist(String itemID) {
+        // Iterasi melalui daftar item dan memeriksa kesamaan ID item.
+        for (Item item : items) {
+            if (item.getIdItem().equalsIgnoreCase(itemID)) {
+                return true; // Jika ditemukan, mengembalikan true.
+            }
+        }
+        return false; // Jika tidak ditemukan, mengembalikan false.
+    }
+
+    // Fungsi ini mendapatkan indeks item berdasarkan nama.
     public int getIndexItemByName(String itemName) {
-        for (int indexCategory = 0; indexCategory < items.size(); indexCategory++) {
-            if(items.get(indexCategory).getNameItem().equals(itemName)){
-                return indexCategory;
+        // Iterasi melalui daftar item dan mencari indeks dengan nama yang cocok.
+        for (int indexItem = 0; indexItem < items.size(); indexItem++) {
+            if(items.get(indexItem).getNameItem().equals(itemName)){
+                return indexItem; // Mengembalikan indeks jika ditemukan.
             }
         }
-        return -1;
+        return -1; // Mengembalikan -1 jika tidak ditemukan.
     }
 
-    public int getIndexItemByID(String categoryID) {
-        for (int indexCategory = 0; indexCategory < items.size(); indexCategory++) {
-            if(items.get(indexCategory).getIdItem().equalsIgnoreCase(categoryID)){
-                return indexCategory;
+    // Fungsi ini mendapatkan indeks item berdasarkan ID.
+    public int getIndexItemByID(String itemID) {
+        // Iterasi melalui daftar item dan mencari indeks dengan ID yang cocok.
+        for (int indexItem = 0; indexItem < items.size(); indexItem++) {
+            if(items.get(indexItem).getIdItem().equalsIgnoreCase(itemID)){
+                return indexItem; // Mengembalikan indeks jika ditemukan.
             }
         }
-        return -1;
+        return -1; // Mengembalikan -1 jika tidak ditemukan.
     }
 
+    // Fungsi ini mendapatkan ID item berdasarkan nama.
     public String getIDByNameItem(String itemName) {
-        return items.get(getIndexItemByName(itemName)).getIdItem();
+        // Mendapatkan indeks item berdasarkan nama.
+        int indexItem = getIndexItemByName(itemName);
+        // Mengembalikan ID item dari objek item yang ditemukan.
+        return items.get(indexItem).getIdItem();
     }
 
-    public String getNameByIDItem(String categoryID) {
-        return items.get(getIndexItemByName(categoryID)).getNameItem();
+    // Fungsi ini mendapatkan nama item berdasarkan ID.
+    public String getNameByIDItem(String itemID) {
+        // Mendapatkan indeks item berdasarkan ID.
+        int indexItem = getIndexItemByName(itemID);
+        // Mengembalikan nama item dari objek item yang ditemukan.
+        return items.get(indexItem).getNameItem();
     }
 
+    //================================================ CRUD ======================================================
+
+    // Fungsi ini menambahkan item baru.
     public boolean addItem(String itemName) {
-        if(isItemNameExist(itemName)) {
-            InputHandler inputHandler = new InputHandler();
-            String choice = inputHandler.getInputText("Nama item sudah ada, ingin tetap melanjutkan (Y/n)?  ");
-            inputHandler.close();
-            if(!choice.equals("Y")) {
-                return false;
+        // Jika nama item sudah ada, tanyakan kepada pengguna apakah ingin melanjutkan.
+        if (isItemNameExist(itemName)) {
+            String choice = new InputHandler().getInputText("Nama item sudah ada, ingin tetap melanjutkan (Y/n)?  ");
+            if (!choice.equals("Y")) {
+                return false; // Pengguna memilih untuk tidak melanjutkan.
             }
         }
+        // Tambahkan item baru ke dalam daftar.
         items.add(new Item(getNewIDItem(itemName), itemName));
         return true;
     }
 
+    // Fungsi ini menghapus item berdasarkan ID.
     public boolean removeItemByID(String itemId) {
-        if(!isItemIDExist(itemId)) return false;
+        // Jika ID item tidak ada, kembalikan false.
+        if (!isItemIDExist(itemId)) return false;
+        // Hapus item dari daftar berdasarkan ID.
         items.remove(getIndexItemByID(itemId));
         return true;
     }
 
+    // Fungsi ini menghapus item berdasarkan nama.
     public boolean removeItemByName(String itemName) {
-        if(!isItemNameExist(itemName)) return false;
+        // Jika nama item tidak ada, kembalikan false.
+        if (!isItemNameExist(itemName)) return false;
+        // Hapus item dari daftar berdasarkan nama.
         items.remove(getIndexItemByName(itemName));
         return true;
     }
 
+    // Fungsi ini mengupdate nama item berdasarkan ID.
     public boolean updateNameItemByID(String itemId, String newNameItem) {
-        if(!isItemIDExist(itemId)) return false;
+        // Jika ID item tidak ada, kembalikan false.
+        if (!isItemIDExist(itemId)) return false;
+        // Update nama item berdasarkan ID.
         items.get(getIndexItemByID(itemId)).setNameItem(newNameItem);
         return true;
     }
 
+    // Fungsi ini mengupdate nama item berdasarkan nama.
     public boolean updateNameItemByName(String itemName, String newNameItem) {
-        if(!isItemNameExist(itemName)) return false;
+        // Jika nama item tidak ada, kembalikan false.
+        if (!isItemNameExist(itemName)) return false;
+        // Update nama item berdasarkan nama.
         items.get(getIndexItemByName(itemName)).setNameItem(newNameItem);
         return true;
     }
 
-    public boolean showItems() {
-        if (items.size() == 0) return false;
+    // Fungsi ini menampilkan daftar item.
+    public void showItems() {
+        // Jika daftar item kosong, keluar dari fungsi.
+        if (items.size() == 0) return;
+        // Buat objek untuk menampilkan daftar item dalam bentuk tabel.
         Text text = new Text("",
                 new String[]{"ID", "Nama Item"},
                 new char[]{'c', 'l'},
                 new int[]{5, 50});
-        text.printSubTitle();
+        text.printSubTitle(); // Tampilkan judul tabel.
+        // Iterasi melalui daftar item dan tampilkan setiap entri.
         for (int index = 0; index < items.size(); index++) {
             text.printBody(index, new String[]{
                     items.get(index).getIdItem(),
                     items.get(index).getNameItem()
             });
         }
+        // Tampilkan opsi untuk keluar dari daftar item.
         text.printBody(items.size(), new String[]{ "0", "Keluar" });
-        text.line();
-        return true;
+        text.line(); // Tampilkan garis pemisah.
     }
+
+    //================================================ CRUD ======================================================
 }

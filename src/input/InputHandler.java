@@ -47,16 +47,16 @@ public class InputHandler {
         scanner.nextLine();
     }
 
-    // Fungsi untuk menerima masukan dari pengguna dengan menampilkan pesan terlebih dahulu
-    public String getInputText (String message) {
-        System.out.print(message);
-        String input = scanner.nextLine().trim();
+    // Fungsi untuk menerima masukan teks dari pengguna dengan menampilkan pesan terlebih dahulu.
+    public String getInputText(String message) {
+        System.out.print(message); // Menampilkan pesan kepada pengguna.
+        String input = scanner.nextLine().trim(); // Menerima masukan dari pengguna dan menghapus spasi di awal dan akhir.
         while (input.equals("")) {
-            errorMessage("Maaf, input tidak boleh kosong!");
-            System.out.print(message);
-            input = scanner.nextLine().trim();
+            errorMessage("Maaf, input tidak boleh kosong!"); // Menampilkan pesan kesalahan jika input kosong.
+            System.out.print(message); // Menampilkan pesan kembali.
+            input = scanner.nextLine().trim(); // Menerima masukan kembali dari pengguna.
         }
-        return input;
+        return input; // Mengembalikan masukan yang sudah dihapus spasi.
     }
 
     // Menutup scanner setelah penggunaan selesai
